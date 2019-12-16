@@ -15,14 +15,12 @@ API 定义技术文档: [https://apidocs.perfee.com](https://apidocs.perfee.com)
 ## 示例代码
 在正式使用前，请务必将代码中的 app_key 与 app_secret 替换成自己的真实数据！
 ### cURL
-> curl -X POST https://openapi.perfee.com/access_token \  
->   -H "Content-Type: application/json" \  
->    -d '{  
->        "appId": "r9g2f6vk",  
->        "appSecret": "7167bcc64be6e5d8b6a028f62deb3c3923bb3861",  
->        "storeId": 1  
->    }'
-
-### Python
-### JavaScript
-### Java
+```shell
+curl -X POST https://openapi.perfee.com/access_token \
+    -H "Content-Type: application/json" \
+    -d '{
+        "appId": "r9g2f6vk",
+        "appSecret": "7167bcc64be6e5d8b6a028f62deb3c3923bb3861",
+        "storeId": 1
+    }'
+```
