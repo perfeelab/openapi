@@ -14,14 +14,14 @@ API 定义技术文档: [https://apidocs.perfee.com](https://apidocs.perfee.com)
 
 ## 示例代码
 在正式使用前，请务必将代码中的 appId 与 appSecret 替换成自己的真实数据！
-### cURL
+### [cURL (shell)](samples/shell/get_orders.sh)
 ```shell
 curl -v -X POST https://openapi.perfee.com/access_token \
     -H "Content-Type: application/json" \
     -d '{
         "appId": "your_app_id",
         "appSecret": "your_app_secret",
-        "storeId": 1
+        "storeId": your_store_id
     }'
 
 curl -v -G https://openapi.perfee.com/orders \
