@@ -16,7 +16,7 @@ API 定义技术文档: [https://apidocs.perfee.com](https://apidocs.perfee.com)
 在正式使用前，请务必将代码中的 appId 与 appSecret 替换成自己的真实数据！
 ### cURL
 ```shell
-curl -X POST https://openapi.perfee.com/access_token \
+curl -v -X POST https://openapi.perfee.com/access_token \
     -H "Content-Type: application/json" \
     -d '{
         "appId": "your_app_id",
@@ -24,7 +24,9 @@ curl -X POST https://openapi.perfee.com/access_token \
         "storeId": 1
     }'
 
-curl -G https://openapi.perfee.com/orders \
+curl -v -G https://openapi.perfee.com/orders \
     -H "AccessToken: your_access_token" \
-    -d "regionId=1&status=0&page=1&limit=10&startTimestamp=1576771200&endTimestamp=1575907200&payMethod=1&payStatus=2"
+    -d "regionId=1&status=0&page=1&limit=10" \
+    -d "startTimestamp=1576771200&endTimestamp=1575907200" \
+    -d "payMethod=1&payStatus=1"
 ```
