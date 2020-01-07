@@ -16,7 +16,7 @@ API 定义技术文档: [https://apidocs.perfee.com](https://apidocs.perfee.com)
 在正式使用前，请务必将代码中的 appId 与 appSecret 替换成自己的真实数据！
 ### [cURL (shell)](samples/shell/get_orders.sh)
 ```shell
-curl -v -X POST https://openapi.perfee.com/access_token \
+curl -v -X POST https://openapi.perfee.com/access-token \
     -H "Content-Type: application/json" \
     -d '{
         "appId": "your_app_id",
@@ -24,7 +24,7 @@ curl -v -X POST https://openapi.perfee.com/access_token \
         "storeId": your_store_id
     }'
 
-curl -v -G https://openapi.perfee.com/orders \
+curl -v -G https://openapi.perfee.com/sale-orders \
     -H "AccessToken: your_access_token" \
     -d "regionId=1&status=0&page=1&limit=10" \
     -d "startTimestamp=1576771200&endTimestamp=1575907200" \
@@ -36,7 +36,7 @@ from requests import request
 
 # 获取token
 response = request(
-    "post", "https://openapi-dev.perfee.com/access_token",
+    "post", "https://openapi-dev.perfee.com/access-token",
     headers={'Content-type': 'application/json'},
     data='{"appId": "your_app_id", "appSecret": "your_app_secret", "storeId": you_storeId}'
 )
@@ -48,7 +48,7 @@ print(token)
 
 # 使用RefreshToken获取token
 response = request(
-    "post", "https://openapi-dev.perfee.com/token_refresh",
+    "post", "https://openapi-dev.perfee.com/token-refresh",
     headers={'RefreshToken': refresh_token}
 )
 resp_json = response.json()
@@ -58,7 +58,7 @@ print(token)
 
 # 获取单个order信息
 response = request(
-    "get", "https://openapi-dev.perfee.com/orders/123456",
+    "get", "https://openapi-dev.perfee.com/sale-orders/123456",
     headers={'AccessToken': token}
 )
 resp_json = response.json()
@@ -67,7 +67,7 @@ print(resp_json)
 
 # 获取订单列表
 response = request(
-    "get", "https://openapi-dev.perfee.com/orders",
+    "get", "https://openapi-dev.perfee.com/sale-orders",
     headers={'AccessToken': token},
     params={
         "regionId": 1, "status": 0, "page": 1, "limit": 20,

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-curl -v -X POST https://openapi.perfee.com/access_token \
+curl -v -X POST https://openapi.perfee.com/access-token \
     -H "Content-Type: application/json" \
     -d '{
         "appId": "your_app_id",
@@ -8,7 +8,7 @@ curl -v -X POST https://openapi.perfee.com/access_token \
         "storeId": your_store_id
     }'
 
-curl -v -G https://openapi.perfee.com/orders \
+curl -v -G https://openapi.perfee.com/sale-orders \
     -H "AccessToken: your_access_token" \
     -d "regionId=1&status=0&page=1&limit=10" \
     -d "startTimestamp=1576771200&endTimestamp=1575907200" \
