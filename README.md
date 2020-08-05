@@ -25,13 +25,13 @@ API 定义技术文档:[https://apidocs.perfee.com](https://apidocs.perfee.com)
 * 示例:
 
 ```
-https://openapi-dev.perfee.com/oauth/authorize?response_type=code&client_id=client_id_test&redirect_uri=http://www.oauth.net&state=1212&scope=seller
+https://openapi-dev.perfee.com/oauth/authorize?response_type=code&client_id=client_id_example&redirect_uri=http://www.oauth.net&state=1212&scope=seller
 ```
 * 参数说明
 
 | 参数名称 | 是否必须 | 示例 | 备注 |
 | --- | --- | --- | --- |
-| client_id | 是 | client_id_test | 创建应用时获得。 |
+| client_id | 是 | client_id_example | 创建应用时获得。 |
 | redirect_uri | 是 | http://www.oauth.net | redirect_uri指的是应用发起请求时，所传的回调地址是，在用户授权后应用会跳转至redirect_uri。要求与应用注册时填写的回调地址域名一致。 |
 | state | 是 | 1212 | 随机字符串，传入值与返回值保持一致。 |
 | scope | 是 | seller | 申请权限范围，可选值:1、seller。 |
@@ -52,38 +52,46 @@ https://openapi-dev.perfee.com/oauth/authorize?response_type=code&client_id=clie
 
 | 名称 | 是否必须 | 示例 | 备注 |
 | --- | --- | --- | --- |
-| client_id | 是 | client_id_test | 创建应用时获得。 |
-| client_secret | 是 | client_secret_test | 创建应用时获得。 |
+| client_id | 是 | client_id_example | 创建应用时获得。 |
+| client_secret | 是 | client_secret_example | 创建应用时获得。 |
 | redirect_uri | 是 | http://www.oauth.net | redirect_uri指的是应用发起请求时，所传的回调地址参数，在用户授权后应用会跳转至redirect_uri。要求与应用注册时填写的回调地址域名一致。 |
 | grant_type | 是 | authorization_code | 授权类型 ，可选值为authorization_code、refresh_token。当grant_type为authorization_code，应带上可选参数code；当grant_type为refresh_token时，应带上可选参数refresh_token。	 |
 | code | 否 |  | 上个步骤授权回调获取的code。 |
 | refresh_token | 否 |  | 使用authorization_code方式授权时返回的refresh_token。 |
 
 * code换取access_token示例
-```
-curl -i -d "code=6e0e89bed6987e9e2b540b42e91f5e77&grant_type=authorization_code&client_id=client_id_test&client_secret=client_secret_test&redirect_uri=http://www.oauth.net" https://openapi-dev.perfee.com/oauth/token
+```shell
+curl -i -d "code=6e0e89bed6987e9e2b540b42e91f5e77" \
+    -d "grant_type=authorization_code" \
+    -d "client_id=client_id_example&client_secret=client_secret_example" \
+    -d "redirect_uri=http://www.oauth.net" \
+    https://openapi-dev.perfee.com/oauth/token
 ```
 
 * code换取access_token返回值示例
-```
+```shell
 {
     "token_type": "bearer",
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZWxsZXJfaWQiOjEsInN0b3JlX2lkIjoxLCJyZWdpb25faWRfb2Zfc2VsbGVyIjoyLCJyZWdpb25faWRfb2Zfc3RvcmUiOjEsImNsaWVudF9pZCI6Imhza3Rlc3QiLCJyZWRpcmVjdF91cmkiOiJodHRwOi8vMTI3LjAuMC4xOjUwMDAvcGVyZmVlL2F1dGhvcml6ZSIsImV4cCI6MTU5NjYyMDI5Nn0.VaDy0gfGfTpU3x_25wwSjQtj5KHiw4G8uvcz28K4KPo",
+    "access_token": "access_token_example",
     "expires_in": 7200,
-    "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZWxsZXJfaWQiOjEsInN0b3JlX2lkIjoxLCJyZWdpb25faWRfb2Zfc2VsbGVyIjoyLCJyZWdpb25faWRfb2Zfc3RvcmUiOjEsImNsaWVudF9pZCI6Imhza3Rlc3QiLCJyZWRpcmVjdF91cmkiOiJodHRwOi8vMTI3LjAuMC4xOjUwMDAvcGVyZmVlL2F1dGhvcml6ZSIsImV4cCI6MTYyNzcxNzA5Nn0.XOdwFl7MOHqtRU0CQkQCwXio7tD3rAweWVh2jt6hotw",
+    "refresh_token": "refresh_token_example",
     "refresh_token_expires_in": 31104000
 }
 ```
 * refresh_token换取access_token示例
-```
-curl -i -d "grant_type=refresh_token&client_id=client_id_test&client_secret=client_id_test&redirect_uri=http://127.0.0.1:5000/perfee/authorize&refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZWxsZXJfaWQiOjEsInN0b3JlX2lkIjoxLCJyZWdpb25faWRfb2Zfc2VsbGVyIjoyLCJyZWdpb25faWRfb2Zfc3RvcmUiOjEsImNsaWVudF9pZCI6Imhza3Rlc3QiLCJyZWRpcmVjdF91cmkiOiJodHRwOi8vMTI3LjAuMC4xOjUwMDAvcGVyZmVlL2F1dGhvcml6ZSIsImV4cCI6MTYyNzcxNzA5Nn0.XOdwFl7MOHqtRU0CQkQCwXio7tD3rAweWVh2jt6hotw" https://openapi-dev.perfee.com/oauth/token
+```shell
+curl -i -d "grant_type=refresh_token" \
+    -d "client_id=client_id_example&client_secret=client_id_example" \
+    -d "redirect_uri=http://www.oauth.net" \
+    -d "refresh_token=refresh_token_example" \
+    https://openapi-dev.perfee.com/oauth/token
 ```
 
 * refresh_token换取access_token返回值示例
-```
+```shell
 {
     "token_type": "bearer",
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZWxsZXJfaWQiOjEsInN0b3JlX2lkIjoxLCJyZWdpb25faWRfb2Zfc2VsbGVyIjoyLCJyZWdpb25faWRfb2Zfc3RvcmUiOjEsImNsaWVudF9pZCI6Imhza3Rlc3QiLCJyZWRpcmVjdF91cmkiOiJodHRwOi8vMTI3LjAuMC4xOjUwMDAvcGVyZmVlL2F1dGhvcml6ZSIsImV4cCI6MTU5NjYyMDI5Nn0.VaDy0gfGfTpU3x_25wwSjQtj5KHiw4G8uvcz28K4KPo",
+    "access_token": "access_token_example",
     "expires_in": 7200
 }
 ```
