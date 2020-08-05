@@ -1,22 +1,7 @@
-# Open API
-Perfee Open API 开放平台是为商家、供应商等相关合作伙伴提供的一站式应用程序接口和数据解决方案，API 采用 RESTful 风格设计实现，并遵守被业界广泛应用的 OAuth 2.0 安全认证规范。
-
-## 使用指南
-API 定义技术文档: [https://apidocs.perfee.com](https://apidocs.perfee.com)
-
-请使用带有公司域名的电子邮箱申请注册帐号，并致信 openapi@perfee.com 联系开通相关权限并获得相应的技术资料（APP_ID、APP_SECRET等），信函内容请至少包含以下必要项目：
->
-> 注册邮箱：（之前使用的公司域名邮箱，如：wangjg@abc.com）  
-> 公司名称：（如：ABC电子商务有限公司）  
-> 联络人：（如：王建国）  
-> 职位 / 称谓：（如：产品总监）  
-> 手机 / 电话：（如：+86 18912345678）  
-
 ## PerFee卖家用户授权介绍
 
-```
-    如果您的应用和PerFee平台对接时需要获取卖家用户数据（如商品、订单等），为保证卖家用户数据的安全，您的应用需要取得卖家用户的授权，即获取访问卖家用户数据的授权令牌 Access Token。这种情况下，您的应用需要引导卖家用户完成使用PerFee帐号“登录授权”的流程。该流程采用国际通用的OAuth2.0标准协议作为用户身份验证与授权协议。目前PerFee OAuth2.0服务支持采用授权码模式（authorization code）获取Access Token（授权令牌），详见如下说明。
-```
+如果您的应用和PerFee平台对接时需要获取卖家用户数据（如商品、订单等），为保证卖家用户数据的安全，您的应用需要取得用户的授权，即获取访问卖家用户数据的授权令牌 Access Token。这种情况下，您的应用需要引导卖家用户完成使用PerFee帐号录授权”的流程。该流程采用国际通用的OAuth2.0标准协议作为用户身份验证与授权协议。目前PerFee OAuth2.0服务支持采用授模式（authorization code）获取Access Token（授权令牌），详见如下说明。
+
 
 ### 1. 请求入口地址
 
@@ -101,6 +86,20 @@ curl -i -d "grant_type=refresh_token&client_id=client_id_test&client_secret=clie
     "expires_in": 7200
 }
 ```
+
+# Open API
+Perfee Open API 开放平台是为商家、供应商等相关合作伙伴提供的一站式应用程序接口和数据解决方案，API 采用 RESTful 风格设计实现，并遵守被业界广泛应用的 OAuth 2.0 安全认证规范。
+
+## 使用指南
+API 定义技术文档: [https://apidocs.perfee.com](https://apidocs.perfee.com)
+
+请使用带有公司域名的电子邮箱申请注册帐号，并致信 openapi@perfee.com 联系开通相关权限并获得相应的技术资料（APP_ID、APP_SECRET等），信函内容请至少包含以下必要项目：
+>
+> 注册邮箱：（之前使用的公司域名邮箱，如：wangjg@abc.com）  
+> 公司名称：（如：ABC电子商务有限公司）  
+> 联络人：（如：王建国）  
+> 职位 / 称谓：（如：产品总监）  
+> 手机 / 电话：（如：+86 18912345678）  
 
 ## 示例代码
 在正式使用前，请务必将代码中的 appId 与 appSecret 替换成自己的真实数据！
