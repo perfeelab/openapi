@@ -2,7 +2,7 @@
 
 如果您的应用和PerFee平台对接时需要获取卖家用户数据（如商品、订单等），为保证卖家用户数据的安全，您的应用需要取得用户的授权，即获取访问卖家用户数据的授权令牌 Access Token。这种情况下，您的应用需要引导卖家用户完成使用PerFee帐号录授权”的流程。该流程采用国际通用的OAuth2.0标准协议作为用户身份验证与授权协议。目前PerFee OAuth2.0服务支持采用授模式（authorization code）获取Access Token（授权令牌），详见如下说明。
 
-API 定义技术文档:[https://apidocs.perfee.com](https://apidocs.perfee.com)
+API 定义技术文档:[https://apidocs.perfee.com/project/60/interface/api](https://apidocs.perfee.com/project/60/interface/api)
 
 ### 1. 请求入口地址
 
