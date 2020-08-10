@@ -8,12 +8,12 @@ API 定义技术文档:[https://apidocs.perfee.com](https://apidocs.perfee.com)
 
 #### 1) 获取授权码（code）
 
-* 测试环境:[https://openapi-dev.perfee.com/oauth/authorize](https://openapi-dev.perfee.com/oauth/authorize)
+* 测试环境:[https://openapi-dev.perfee.com/v2/oauth/authorize](https://openapi-dev.perfee.com/v2/oauth/authorize)
 * 正式环境:[https://openapi.perfee.com/oauth/authorize](https://openapi.perfee.com/oauth/authorize)
 
 #### 2) 获取访问令牌（access_token）
 
-* 测试环境:[https://openapi-dev.perfee.com/oauth/token](https://openapi-dev.perfee.com/oauth/token)
+* 测试环境:[https://openapi-dev.perfee.com/v2/oauth/token](https://openapi-dev.perfee.com/v2/oauth/token)
 * 正式环境:[https://openapi.perfee.com/oauth/token](https://openapi.perfee.com/oauth/token)
 
 ### 2. 授权操作步骤
@@ -25,7 +25,7 @@ API 定义技术文档:[https://apidocs.perfee.com](https://apidocs.perfee.com)
 * 示例:
 
 ```
-https://openapi-dev.perfee.com/oauth/authorize?response_type=code&client_id=client_id_example&redirect_uri=http://www.oauth.net&state=1212&scope=seller
+https://openapi-dev.perfee.com/v2/oauth/authorize?response_type=code&client_id=client_id_example&redirect_uri=http://www.oauth.net&state=1212&scope=seller
 ```
 * 参数说明
 
@@ -65,7 +65,7 @@ curl -i -d "code=6e0e89bed6987e9e2b540b42e91f5e77" \
     -d "grant_type=authorization_code" \
     -d "client_id=client_id_example&client_secret=client_secret_example" \
     -d "redirect_uri=http://www.oauth.net" \
-    https://openapi-dev.perfee.com/oauth/token
+    https://openapi-dev.perfee.com/v2/oauth/token
 ```
 
 * code换取access_token返回值示例
@@ -84,7 +84,7 @@ curl -i -d "grant_type=refresh_token" \
     -d "client_id=client_id_example&client_secret=client_id_example" \
     -d "redirect_uri=http://www.oauth.net" \
     -d "refresh_token=refresh_token_example" \
-    https://openapi-dev.perfee.com/oauth/token
+    https://openapi-dev.perfee.com/v2/oauth/token
 ```
 
 * refresh_token换取access_token返回值示例
@@ -95,3 +95,6 @@ curl -i -d "grant_type=refresh_token" \
     "expires_in": 7200
 }
 ```
+
+
+### 3.更多例子请参看samples和client_demo
