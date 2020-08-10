@@ -1,0 +1,15 @@
+<p>Domo Home</p>
+<p>{% if authorized %}卖家已授权{% else %}卖家未授权{% endif %}</p>
+{% if authorized %}
+<button type="button" onclick="create_product()">创建商品</button>
+{% else %}
+<button type="button" onclick="go_authorize()">点击授权</button>
+{% endif %}
+<script>
+  function create_product() {
+    window.location.href = "/perfee/products"
+  }
+  function go_authorize() {
+    window.location.href = "https://openapi-dev.perfee.com/oauth/authorize?client_id=hsktest&redirect_uri=http://127.0.0.1:5000/perfee/authorize&state=123&response_type=code&scope=seller"
+  }
+</script>

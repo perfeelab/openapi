@@ -1,0 +1,4 @@
+Flask
+Flask-SQLAlchemy
+Authlib==0.14.3
+mysqlclient==2.0.1
