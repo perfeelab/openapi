@@ -1,4 +1,10 @@
-## PerFee卖家用户授权介绍
+# PerFee OpenAPI v2
+通过符合 OAuth 2.0 规范的 API 体系向卖家、第三方卖家（店铺）管理工具厂商以及供应链平台等合作伙伴提供涵盖商品、订单和店铺配置等卖家常用 API 接口，并陆续提供更加完整的接口集合。
+
+## 整体结构
+![Startup Guide](doc_assets/images/openapi-v2.png)
+
+## 授权方式
 
 如果您的应用和PerFee平台对接时需要获取卖家用户数据（如商品、订单等），为保证卖家用户数据的安全，您的应用需要取得用户的授权，即获取访问卖家用户数据的授权令牌 Access Token。这种情况下，您的应用需要引导卖家用户完成使用PerFee帐号录授权”的流程。该流程采用国际通用的OAuth2.0标准协议作为用户身份验证与授权协议。目前PerFee OAuth2.0服务支持采用授模式（authorization code）获取Access Token（授权令牌），详见如下说明。
 
@@ -8,13 +14,13 @@ API 定义技术文档:[https://apidocs.perfee.com/project/60/interface/api](htt
 
 #### 1) 获取授权码（code）
 
-* 测试环境:[https://openapi-dev.perfee.com/v2/oauth/authorize](https://openapi-dev.perfee.com/v2/oauth/authorize)
-* 正式环境:[https://openapi.perfee.com/oauth/authorize](https://openapi.perfee.com/oauth/authorize)
+* 测试环境: [https://openapi-dev.perfee.com/v2/oauth/authorize](https://openapi-dev.perfee.com/v2/oauth/authorize)
+* 正式环境: [https://openapi.perfee.com/v2/oauth/authorize](https://openapi.perfee.com/v2/oauth/authorize)
 
 #### 2) 获取访问令牌（access_token）
 
-* 测试环境:[https://openapi-dev.perfee.com/v2/oauth/token](https://openapi-dev.perfee.com/v2/oauth/token)
-* 正式环境:[https://openapi.perfee.com/oauth/token](https://openapi.perfee.com/oauth/token)
+* 测试环境: [https://openapi-dev.perfee.com/v2/oauth/token](https://openapi-dev.perfee.com/v2/oauth/token)
+* 正式环境: [https://openapi.perfee.com/v2/oauth/token](https://openapi.perfee.com/v2/oauth/token)
 
 ### 2. 授权操作步骤
 
