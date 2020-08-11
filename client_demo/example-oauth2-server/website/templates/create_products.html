@@ -1,0 +1,316 @@
+<style>
+  label,
+  label>span {
+    display: block;
+  }
+
+  label {
+    margin: 15px 0;
+  }
+</style>
+
+<a href="/">Home</a>
+
+<form action="" method="post">
+  <label>
+    <span>title:</span>
+    <input type="text" id="title" name="title">
+  </label>
+  <label>
+    <span>desc:</span>
+    <input type="text" id="desc" name="desc">
+  </label>
+  <label>
+    <span>weight:</span>
+    <input type="text" id="weight" name="weight">
+  </label>
+  <label>
+    <span>details </span>
+    <textarea name="details" id="details" cols="30" rows="10"></textarea>
+  </label>
+
+  <label>
+    <span>region:</span>
+    <select name="region" id="region" onchange="get_warehouse()">
+      {% for region in regions %}
+      <option value="{{ region.id }}">{{ region.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    <span>warehouse:</span>
+    <select name="warehouse" id="warehouse">
+      {% for warehouse in warehouses %}
+      <option value="{{ warehouse.id }}">{{ warehouse.name }} | {{warehouse.location}}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    <span>category:</span>
+    <select name="category" id="category">
+      {% for category in categories %}
+      <option value="{{ category.id }}">{{ category.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    <span>store_category:</span>
+    <select name="store_category" id="store_category">
+      {% for store_categorie in store_categories %}
+      <option value="{{ store_categorie.id }}">{{ store_categorie.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    <span>with_battery:</span>
+    <select name="with_battery" id="with_battery">
+      <option value="0">不带电</option>
+      <option value="1">带电</option>
+      <option value="2">部分带电</option>
+    </select>
+  </label>
+  <label>
+    <span>is_magnetic:</span>
+    <select name="is_magnetic" id="is_magnetic">
+      <option value="0">不带磁</option>
+      <option value="1">带磁</option>
+    </select>
+  </label>
+  <label>
+    <span>is_powder:</span>
+    <select name="is_powder" id="is_powder">
+      <option value="0">不是粉末</option>
+      <option value="1">是粉末</option>
+    </select>
+  </label>
+  <label>
+    <span>is_compressor:</span>
+    <select name="is_compressor" id="is_compressor">
+      <option value="0">不是混合物</option>
+      <option value="1">是混合物</option>
+    </select>
+  </label>
+  <label>
+    <span>online:</span>
+    <select name="online" id="online">
+      <option value="0">不上架</option>
+      <option value="1">上架</option>
+    </select>
+  </label>
+  <label>
+    <span>payment_methods:</span>
+    <input type="checkbox" id="payment_methods_online">online
+    <input type="checkbox" id="payment_methods_cod">COD
+  </label>
+  <label>
+    <span>spec:</span>
+  </label>
+  {% for spec in specs %}
+  <input id="spec_{{ spec.id }}" type="checkbox" name="spec"
+    onclick="get_spec_value({{ spec.id }}, '{{ spec.name }}')">{{ spec.name }}<br>
+  <div id="spec_values_of_{{ spec.id }}"></div><br>
+  {% endfor %}
+  <label>
+    <span>skus:</span>
+  </label>
+  <div>
+    <table id="skus_box" border="1">
+      <tr>
+        <th>specs</th>
+        <th>id_by_vendor</th>
+        <th>list_price</th>
+        <th>sale_price</th>
+        <th>stock</th>
+        <th>images</th>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <br>
+  <button type="button" onclick="_submit()">Submit</button>
+</form>
+<script>
+  let spec_choice = { {% for spec in specs %}{{ spec.id }}: false, {% endfor %} }
+  let skus = []
+  let product_images = []
+
+
+  function get_spec_value(spec_id, spec_name) {
+    if (spec_choice[spec_id] === false) {
+      let spec_value_url = "{{ url_for('website.routes.perfee-spec-values') }}" + `?spec_id=${spec_id}`
+      let xhr = new XMLHttpRequest;
+      xhr.open("GET", spec_value_url, true);
+      xhr.send();
+      xhr.onload = function () {
+        let json = JSON.parse(xhr.responseText);
+        let values = json.values
+        let html = ""
+        values.forEach(v => {
+          html += `<input id="spec_value_${v.id}" type="checkbox" name="spec_value_of_${spec_id}" spec_id="${spec_id}"
+                   spec_name="${spec_name}" spec_value_id="${v.id}" spec_value="${v.value}" onclick=create_skus() >${v.value}`
+        });
+        document.getElementById(`spec_values_of_${spec_id}`).innerHTML = html
+        spec_choice[spec_id] = true
+      }
+    } else {
+      document.getElementById(`spec_values_of_${spec_id}`).innerHTML = ""
+      spec_choice[spec_id] = false
+    }
+    create_skus()
+  }
+
+  function create_skus() {
+    let _skus = []
+    let spec_group = []
+    Object.keys(spec_choice).forEach(key => {
+      if (spec_choice[key] == true) {
+        let eles = document.getElementsByName(`spec_value_of_${key}`);
+        if (spec_group.length === 0) {
+          eles.forEach(ele => {
+            if (ele.checked) {
+              let spec_id = parseInt(ele.getAttribute("spec_id"))
+              let spec_name = ele.getAttribute("spec_name")
+              let spec_value_id = parseInt(ele.getAttribute("spec_value_id"))
+              let spec_value = ele.getAttribute("spec_value")
+              let spec = {}
+              spec["id"] = spec_id
+              spec["name"] = spec_name
+              spec["value"] = { "id": spec_value_id, "value": spec_value }
+              spec_group.push([spec])
+            }
+          });
+        } else {
+          let _spec_group = []
+          spec_group.forEach(e => {
+            eles.forEach(ele => {
+              if (ele.checked) {
+                let _e = JSON.parse(JSON.stringify(e));
+                let spec_id = parseInt(ele.getAttribute("spec_id"))
+                let spec_name = ele.getAttribute("spec_name")
+                let spec_value_id = parseInt(ele.getAttribute("spec_value_id"))
+                let spec_value = ele.getAttribute("spec_value")
+                let spec = {}
+                spec["id"] = spec_id
+                spec["name"] = spec_name
+                spec["value"] = { "id": spec_value_id, "value": spec_value }
+                _e.push(spec)
+                _spec_group.push(_e)
+              }
+            });
+          });
+          spec_group = _spec_group
+        }
+      }
+    });
+    spec_group.forEach(g => {
+      let sku = { "specs": g, "id_by_vendor": "", "list_price": "", "sale_price": "", "stock": "", "images": [] }
+      _skus.push(sku)
+    });
+    skus = _skus
+    let table = `<tr>
+      <th>specs</th>
+      <th>id_by_vendor</th>
+      <th>list_price</th>
+      <th>sale_price</th>
+      <th>stock</th>
+      <th>images</th>
+      </tr>`
+    let for_index = 0
+    skus.forEach(sku => {
+      spec_str = ""
+      sku.specs.forEach(spec => {
+        spec_str += `${spec.name}:${spec.value.value};`
+      });
+      table += `<tr class="sku_tr">
+                <td>${spec_str}</td>
+                <td><input></td>
+                <td><input></td>
+                <td><input></td>
+                <td><input></td>
+                <td><input class="image_input" type=file name="files" onchange="upload_image(${for_index})"></td>
+                </tr>`
+      for_index += 1
+    });
+    document.getElementById("skus_box").innerHTML = table
+  }
+
+  function get_warehouse() {
+    let region_id = document.getElementById("region").value
+    let spec_value_url = "{{ url_for('website.routes.perfee-warehouses') }}" + `?region_id=${spec_id}`
+    let xhr = new XMLHttpRequest;
+    xhr.open("GET", spec_value_url, true);
+    xhr.send();
+    xhr.onload = function () {
+      let json = JSON.parse(xhr.responseText);
+      let values = json.values
+      let html = ""
+      values.forEach(v => {
+        html += `<input id="spec_value_${v.id}" type="checkbox" name="spec_value" spec_id="${spec_id}"
+                 spec_name="${spec_name}" spec_value_id="${v.id}" spec_value="${v.value}" onclick=create_skus() >${v.value}`
+      });
+      document.getElementById(`spec_values_of_${spec_id}`).innerHTML = html
+      spec_choice[spec_id] = true
+    }
+  }
+
+  function _submit() {
+    let sku_trs = document.getElementsByClassName("sku_tr")
+    for (let index = 0; index < sku_trs.length; index++) {
+      const element = sku_trs[index];
+      skus[index]["id_by_vendor"] = element.children[1].children[0].value
+      skus[index]["list_price"] = parseInt(element.children[2].children[0].value)
+      skus[index]["sale_price"] = parseInt(element.children[3].children[0].value)
+      skus[index]["stock"] = parseInt(element.children[4].children[0].value)
+    }
+    let title = document.getElementById("title").value
+    let desc = document.getElementById("desc").value
+    let weight = parseFloat(document.getElementById("weight").value)
+    let detail_content = [{type: "text", content: document.getElementById("details").value}]
+    let region_id = parseInt(document.getElementById("region").value)
+    let category_id = parseInt(document.getElementById("category").value)
+    let store_category_id = parseInt(document.getElementById("store_category").value)
+    let warehouse_id = parseInt(document.getElementById("warehouse").value)
+    let with_battery = parseInt(document.getElementById("with_battery").value)
+    let is_magnetic = Boolean(parseInt(document.getElementById("is_magnetic").value))
+    let is_powder = Boolean(parseInt(document.getElementById("is_powder").value))
+    let is_compressor = Boolean(parseInt(document.getElementById("is_compressor").value))
+    let online = Boolean(parseInt(document.getElementById("online").value))
+    let payment_methods = []
+    if (document.getElementById("payment_methods_online").checked) {
+      payment_methods.push(1)
+    }
+    if (document.getElementById("payment_methods_cod").checked) {
+      payment_methods.push(2)
+    }
+    let product = {
+      title, desc, weight, detail_content, region_id, category_id, store_category_id,
+      with_battery, is_magnetic, is_powder, is_compressor, online, payment_methods,
+      warehouse_id, skus, video: "", lang: "en", "images": product_images
+    }
+    console.log(product)
+    let xhr = new XMLHttpRequest();
+    let data = JSON.stringify(product)
+    xhr.open("POST", "{{ url_for('website.routes.perfee-products') }}", true);
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.send(data);
+    xhr.onload = function () {
+      let json = JSON.parse(xhr.responseText);
+      alert(xhr.responseText)
+    }
+  }
+
+  function upload_image(index) {
+    let image_input = document.getElementsByClassName("image_input")[index]
+    let fileObj = image_input.files[0];
+    let formData = new FormData();
+    formData.append('files', fileObj);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "{{ url_for('website.routes.perfee-upload-images') }}", true);
+    xhr.send(formData);
+    xhr.onload = function () {
+      let json = JSON.parse(xhr.responseText);
+      skus[index]["images"] = [json[0].image_name]
+      product_images.push(json[0].image_name)
+    }
+  }
+</script>
