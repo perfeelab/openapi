@@ -1,12 +1,18 @@
 # PerFee OpenAPI v2
-通过符合 OAuth 2.0 规范的 API 体系向卖家、第三方卖家（店铺）管理工具厂商以及供应链平台等合作伙伴提供涵盖商品、订单和店铺配置等卖家常用 API 接口，并陆续提供更加完整的接口集合。
+通过符合 OAuth 2.0 规范的 API 体系向第三方卖家（店铺）管理工具厂商（ISV）、供应链平台、具备独立开发能力的卖家及合作伙伴提供涵盖商品管理、订单管理和店铺配置等卖家常用 API 接口，并持续开发更多有价值的应用接口。
 
 ## 整体结构
 ![Startup Guide](doc_assets/images/openapi-v2.png)
 
-## 授权方式
+## 接入准备
+### 受信任的应用程序
+由 PerFee 认证的合作伙伴提供，具备研发能力的卖家也可向 PerFee 独立申请新的应用程序。
 
-如果您的应用和PerFee平台对接时需要获取卖家用户数据（如商品、订单等），为保证卖家用户数据的安全，您的应用需要取得用户的授权，即获取访问卖家用户数据的授权令牌 Access Token。这种情况下，您的应用需要引导卖家用户完成使用PerFee帐号录授权”的流程。该流程采用国际通用的OAuth2.0标准协议作为用户身份验证与授权协议。目前PerFee OAuth2.0服务支持采用授模式（authorization code）获取Access Token（授权令牌），详见如下说明。
+### 卖家帐号
+在 PerFee 平台注册并通过审核的卖家，并至少拥有一个可以正常使用的店铺。
+
+## 授权方式
+为确保卖家数据的安全，应用程序通过 API 使用卖家在 PerFee 的数据（如商品、订单等）之前，需要取得 PerFee 卖家的授权，由此获得使用卖家数据的授权访问令牌 Access Token。回此应用程序需要引导卖家完成使用 PerFee 帐号登录授权的流程，该流程采用国际通用的 OAuth 2.0 规范作为用户身份验证与授权协议。目前 PerFee OpenAPI 支持采用授权模式（Authorization Code）获取Access Token（授权令牌），详见如下说明。
 
 API 定义技术文档:[https://apidocs.perfee.com/project/60/interface/api](https://apidocs.perfee.com/project/60/interface/api)
 
