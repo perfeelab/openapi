@@ -5,11 +5,12 @@
 ![Startup Guide](doc_assets/images/openapi-v2.png)
 
 ## 接入准备
-### 受信任的应用程序
-由 PerFee 认证的合作伙伴提供，具备研发能力的卖家也可向 PerFee 独立申请新的应用程序。
+### 申请新的应用程序接入认证
+由 PerFee 认证的独立卖家应用程序厂商（ISV）、供应链平台，具备研发能力的卖家可以申请新的应用程序认证，申请通过审核后，PerFee 将提供应用程序 ID 和安全密钥。
 
 ### 卖家帐号
-在 PerFee 平台注册并通过审核的卖家，并至少拥有一个可以正常使用的店铺。
+在 PerFee 平台注册并通过审核的卖家，并至少拥有一个可以正常使用的店铺。  
+> 注：接入测试阶段，PerFee 将向应用开发者提供测试用卖家帐号和店铺）
 
 ## 授权方式
 为确保卖家数据的安全，应用程序通过 API 使用卖家在 PerFee 的数据（如商品、订单等）之前，需要取得 PerFee 卖家的授权，由此获得使用卖家数据的授权访问令牌 Access Token。回此应用程序需要引导卖家完成使用 PerFee 帐号登录授权的流程，该流程采用国际通用的 OAuth 2.0 规范作为用户身份验证与授权协议。目前 PerFee OpenAPI 支持采用授权模式（Authorization Code）获取Access Token（授权令牌），详见如下说明。
@@ -43,9 +44,9 @@ https://openapi-dev.perfee.com/v2/oauth/authorize?response_type=code&client_id=c
 
 | 参数名称 | 是否必须 | 示例 | 备注 |
 | --- | --- | --- | --- |
-| client_id | 是 | client_id_example | 创建应用时获得。 |
-| redirect_uri | 是 | http://www.oauth.net | redirect_uri指的是应用发起请求时，所传的回调地址是，在用户授权后应用会跳转至redirect_uri。要求与应用注册时填写的回调地址域名一致。 |
-| state | 是 | 1212 | 随机字符串，传入值与返回值保持一致。 |
+| client_id | 是 | haodian_a85jNE | 请联系 PerFee 申请 |
+| redirect_uri | 是 | https://haodian.com/perfee/auth/callback | 由应用开发者提供回调地址，卖家登录授权后将跳转至此，并将在 URL 后随附授权码 |
+| state | 是 | DT3141 | 任意字符串，开发者可用于传递授权会话上下文的相关信息 |
 | scope | 是 | seller | 申请权限范围，可选值:1、seller。 |
 | response_type | 是 | code | 授权类型，可选值:1、code。 |
 
@@ -64,10 +65,10 @@ https://openapi-dev.perfee.com/v2/oauth/authorize?response_type=code&client_id=c
 
 | 名称 | 是否必须 | 示例 | 备注 |
 | --- | --- | --- | --- |
-| client_id | 是 | client_id_example | 创建应用时获得。 |
-| client_secret | 是 | client_secret_example | 创建应用时获得。 |
-| redirect_uri | 是 | http://www.oauth.net | redirect_uri指的是应用发起请求时，所传的回调地址参数，在用户授权后应用会跳转至redirect_uri。要求与应用注册时填写的回调地址域名一致。 |
-| grant_type | 是 | authorization_code | 授权类型 ，可选值为authorization_code、refresh_token。当grant_type为authorization_code，应带上可选参数code；当grant_type为refresh_token时，应带上可选参数refresh_token。	 |
+| client_id | 是 | haodian_a85jNE | 请联系 PerFee 申请 |
+| client_secret | 是 | 4eA6LRP65sh5Bdht | 申请成功后可获得 |
+| redirect_uri | 是 | https://haodian.com/perfee/auth/callback | 同获取授权URL |
+| grant_type | 是 | authorization_code | 授权类型 ，可选值为authorization_code、refresh_token。当grant_type为authorization_code，应带上可选参数code；当grant_type为refresh_token时，应带上可选参数refresh_token。 |
 | code | 否 |  | 上个步骤授权回调获取的code。 |
 | refresh_token | 否 |  | 使用authorization_code方式授权时返回的refresh_token。 |
 
