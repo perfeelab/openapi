@@ -111,3 +111,31 @@ curl -i -d "grant_type=refresh_token" \
 
 
 ### 3.更多例子请参看samples和client_demo
+
+### 4.接口错误信息
+#### 接口如出错，会返回相应的错误信息的JSON文本，包含以下几个参数：
+- error_code: 错误的内部编号
+- error: 错误类型
+- error_description: 错误的描述信息
+
+#### 示例
+```shell
+{
+    "error_code": 40001,
+    "error": "invalid_parameter",
+    "error_description": "Invalid parameter 'response_type'."
+}
+
+```
+
+#### 错误码
+
+| error_code | error | error_description | Http Code | 备注 |
+| ---------- | ----- | ----------------- | --------- | --- |
+| 40001 | invalid_parameter | some error message | 400 | 参数错误。 |
+| 40002 | resources\_not\_found | some error message | 404 | 资源未找到。 |
+| 40003 | unauthorized | some error message | 401 | 鉴权失败。 |
+| 40004 | invalid_token | some error message | 401 | 无效的token。 |
+| 40005 | invalid_operation | some error message | 400 | 无效的操作。 |
+| 40006 | file\_upload\_failed | some error message | 400 | 上传文件失败。 |
+| 40999 | unexpected_error | some error message | 500 | 未知错误。 |
