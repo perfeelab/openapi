@@ -5,7 +5,7 @@ from flask import Blueprint, g, redirect, render_template, request, url_for, jso
 
 bp = Blueprint(__name__, 'home')
 
-perfee = "https://openapi-dev.perfee.com/v2"
+perfee = "https://openapi-test.perfee.com/v2"
 
 
 def refresh_token():
