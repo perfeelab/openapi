@@ -5,7 +5,7 @@ from flask import Blueprint, g, redirect, render_template, request, url_for, jso
 
 bp = Blueprint(__name__, 'home')
 
-perfee = "https://openapi-test.perfee.com/v2"
+otoku_world = "https://openapi-test.otoku-world.com/v2"
 
 
 def refresh_token():
@@ -13,12 +13,12 @@ def refresh_token():
     data = {
         "client_id": "hsktest",
         "client_secret": "hsktest",
-        "redirect_uri": "http://127.0.0.1:5000/perfee/authorize",
+        "redirect_uri": "http://127.0.0.1:5000/otoku_world/authorize",
         "grant_type": "refresh_token",
         "refresh_token": g.refresh_token
     }
     resp = requests.post(
-        perfee + "/oauth/token",
+        otoku_world + "/oauth/token",
         headers={'Content-Type': 'application/json'},
         data=json.dumps(data))
     f = open('token.json', 'r')
@@ -31,41 +31,41 @@ def refresh_token():
     return token_data
 
 
-def perfee_post(path, data):
+def otoku_world_post(path, data):
     headers = {
         "Authorization": "Bearer %s" % g.token,
         "Content-Type": "application/json"
     }
-    url = perfee + path
+    url = otoku_world + path
     r = requests.post(url, headers=headers, data=json.dumps(data))
     if r.status_code == 401:
         token_data = refresh_token()
         g.token = token_data["access_token"]
-        return perfee_post(path, data)
+        return otoku_world_post(path, data)
     elif 200 <= r.status_code < 300:
         return r.json()["data"]
     else:
         return r.json()
 
 
-def perfee_get(path):
+def otoku_world_get(path):
     headers = {
         "Authorization": "Bearer %s" % g.token
     }
-    url = perfee + path
+    url = otoku_world + path
     r = requests.get(url, headers=headers)
     if r.status_code == 401:
         token_data = refresh_token()
         g.token = token_data["access_token"]
-        return perfee_get(path)
+        return otoku_world_get(path)
     elif 200 <= r.status_code < 300:
         return r.json()["data"]
     else:
         return r.json()
 
 
-def perfee_upload(path, files):
-    url = url = perfee + path
+def otoku_world_upload(path, files):
+    url = url = otoku_world + path
     headers = {
         "Authorization": "Bearer %s" % g.token,
     }
@@ -80,14 +80,14 @@ def perfee_upload(path, files):
     if r.status_code == 401:
         token_data = refresh_token()
         g.token = token_data["access_token"]
-        return perfee_upload(path, files)
+        return otoku_world_upload(path, files)
     elif 200 <= r.status_code < 300:
         return r.json()["data"]
     else:
         return r.json()
 
 
-def perfee_authorize_required(func):
+def otoku_world_authorize_required(func):
     def wrapper(*args, **kwargs):
         try:
             f = open('token.json', 'r')
@@ -97,7 +97,7 @@ def perfee_authorize_required(func):
             g.refresh_token = token_data["refresh_token"]
             return func(*args, **kwargs)
         except FileNotFoundError:
-            return redirect(url_for("website.routes.perfee-unauthorize"))
+            return redirect(url_for("website.routes.otoku_world-unauthorize"))
     return wrapper
 
 
@@ -112,20 +112,20 @@ def home():
     return render_template("home.html", authorized=authorized)
 
 
-@bp.route('/perfee/unauthorize', endpoint="perfee-unauthorize")
-def perfee_unauthorize():
+@bp.route('/otoku_world/unauthorize', endpoint="otoku_world-unauthorize")
+def otoku_world_unauthorize():
     return render_template("unauthorize.html")
 
 
-@bp.route('/perfee/authorize', endpoint="perfee-authorize")
-def perfee_authorize():
+@bp.route('/otoku_world/authorize', endpoint="otoku_world-authorize")
+def otoku_world_authorize():
     code = request.args.get('code')
     state = request.args.get('state')
-    url = perfee + "/oauth/token"
+    url = otoku_world + "/oauth/token"
     data = {
         "client_id": "hsktest",
         "client_secret": "hsktest",
-        "redirect_uri": "http://127.0.0.1:5000/perfee/authorize",
+        "redirect_uri": "http://127.0.0.1:5000/otoku_world/authorize",
         "code": code,
         "state": state,
         "grant_type": "authorization_code"
@@ -138,17 +138,17 @@ def perfee_authorize():
     return redirect("/")
 
 
-@bp.route('/perfee/products', methods=['GET', 'POST'],
-          endpoint="perfee-products")
-@perfee_authorize_required
-def perfee_products():
+@bp.route('/otoku_world/products', methods=['GET', 'POST'],
+          endpoint="otoku_world-products")
+@otoku_world_authorize_required
+def otoku_world_products():
     if request.method == 'GET':
-        regions = perfee_get("/regions")
-        store_categories = perfee_get("/store-categories")
-        categories = perfee_get("/categories?depth=3")
-        specs = perfee_get("/specs")
+        regions = otoku_world_get("/regions")
+        store_categories = otoku_world_get("/store-categories")
+        categories = otoku_world_get("/categories?depth=3")
+        specs = otoku_world_get("/specs")
         first_region_id = regions[0]["id"]
-        warehouses = perfee_get("/warehouses?region_id=%s" % first_region_id)
+        warehouses = otoku_world_get("/warehouses?region_id=%s" % first_region_id)
         context = {
             "regions": regions,
             "store_categories": store_categories,
@@ -160,32 +160,32 @@ def perfee_products():
     elif request.method == 'POST':
         data = request.get_json()
         print(data)
-        return jsonify(perfee_post("/products", data))
+        return jsonify(otoku_world_post("/products", data))
 
 
-@bp.route('/perfee/warehouses',  methods=['GET'],
-          endpoint="perfee-warehouses")
-@perfee_authorize_required
-def perfee_warehouses():
+@bp.route('/otoku_world/warehouses',  methods=['GET'],
+          endpoint="otoku_world-warehouses")
+@otoku_world_authorize_required
+def otoku_world_warehouses():
     if request.method == 'GET':
         region_id = request.args.get("region_id")
-        warehouses = perfee_get("/warehouses?region_id=%s" % region_id)
+        warehouses = otoku_world_get("/warehouses?region_id=%s" % region_id)
         return jsonify(warehouses)
 
 
-@bp.route('/perfee/spec-values',  methods=['GET'],
-          endpoint="perfee-spec-values")
-@perfee_authorize_required
-def perfee_spec_values():
+@bp.route('/otoku_world/spec-values',  methods=['GET'],
+          endpoint="otoku_world-spec-values")
+@otoku_world_authorize_required
+def otoku_world_spec_values():
     if request.method == 'GET':
         spec_id = request.args.get("spec_id")
-        spec_values = perfee_get("/spec-values?spec_id=%s" % spec_id)
+        spec_values = otoku_world_get("/spec-values?spec_id=%s" % spec_id)
         return jsonify(spec_values)
 
 
-@bp.route('/perfee/upload-images',  methods=['POST'],
-          endpoint="perfee-upload-images")
-@perfee_authorize_required
-def perfee_upload_images():
+@bp.route('/otoku_world/upload-images',  methods=['POST'],
+          endpoint="otoku_world-upload-images")
+@otoku_world_authorize_required
+def otoku_world_upload_images():
     files = request.files
-    return jsonify(perfee_upload("/product-images", files))
+    return jsonify(otoku_world_upload("/product-images", files))

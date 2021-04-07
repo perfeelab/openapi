@@ -137,7 +137,7 @@
 
   function get_spec_value(spec_id, spec_name) {
     if (spec_choice[spec_id] === false) {
-      let spec_value_url = "{{ url_for('website.routes.perfee-spec-values') }}" + `?spec_id=${spec_id}`
+      let spec_value_url = "{{ url_for('website.routes.otoku_world-spec-values') }}" + `?spec_id=${spec_id}`
       let xhr = new XMLHttpRequest;
       xhr.open("GET", spec_value_url, true);
       xhr.send();
@@ -236,7 +236,7 @@
 
   function get_warehouse() {
     let region_id = document.getElementById("region").value
-    let spec_value_url = "{{ url_for('website.routes.perfee-warehouses') }}" + `?region_id=${spec_id}`
+    let spec_value_url = "{{ url_for('website.routes.otoku_world-warehouses') }}" + `?region_id=${spec_id}`
     let xhr = new XMLHttpRequest;
     xhr.open("GET", spec_value_url, true);
     xhr.send();
@@ -290,7 +290,7 @@
     console.log(product)
     let xhr = new XMLHttpRequest();
     let data = JSON.stringify(product)
-    xhr.open("POST", "{{ url_for('website.routes.perfee-products') }}", true);
+    xhr.open("POST", "{{ url_for('website.routes.otoku_world-products') }}", true);
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.send(data);
     xhr.onload = function () {
@@ -305,7 +305,7 @@
     let formData = new FormData();
     formData.append('files', fileObj);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "{{ url_for('website.routes.perfee-upload-images') }}", true);
+    xhr.open("POST", "{{ url_for('website.routes.otoku_world-upload-images') }}", true);
     xhr.send(formData);
     xhr.onload = function () {
       let json = JSON.parse(xhr.responseText);
